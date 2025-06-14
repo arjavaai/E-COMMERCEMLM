@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from './contexts/AuthContext';
+import { useCart } from './contexts/CartContext';
+import { useProducts } from './contexts/ProductContext';
+import { useOrders } from './contexts/OrderContext';
+import { useNavigate } from 'react-router-dom';
 
 // Mock Data
 const smartFormulasData = [

@@ -383,6 +383,21 @@ export const Hero = () => {
 
 // Product Card Component
 const ProductCard = ({ product, showPrimePrice = true }) => {
+  const { addToCart } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddToCart = async () => {
+    setIsAdding(true);
+    try {
+      addToCart(product);
+      // Show success animation or notification
+      setTimeout(() => setIsAdding(false), 1000);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      setIsAdding(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 group hover:scale-105 transform transition-transform">
       <div className="aspect-square mb-4 bg-gray-50 rounded-lg overflow-hidden">
@@ -398,25 +413,52 @@ const ProductCard = ({ product, showPrimePrice = true }) => {
           {product.name}
         </h3>
         <p className="text-gray-600 text-sm">{product.type}</p>
+        {product.description && (
+          <p className="text-gray-500 text-xs">{product.description}</p>
+        )}
         
         <div className="space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-gray-500 text-sm">MRP Price</span>
-            <span className="text-gray-500 text-sm line-through">₹{product.mrp.toFixed(2)}</span>
+            <span className="text-gray-500 text-sm line-through">₹{product.mrp?.toFixed(2)}</span>
           </div>
           {showPrimePrice && (
             <div className="flex items-center justify-between">
               <span className="text-teal-600 font-semibold text-sm">Prime Price</span>
-              <span className="text-teal-600 font-bold">₹{product.prime.toFixed(2)}</span>
+              <span className="text-teal-600 font-bold">₹{product.prime?.toFixed(2)}</span>
             </div>
           )}
         </div>
         
-        <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors duration-200 flex items-center justify-center space-x-2">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6h11" />
-          </svg>
-          <span>Add To Cart</span>
+        <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+          <span>Stock: {product.stockQuantity || 0}</span>
+          <span className={`px-2 py-1 rounded-full text-xs ${product.inStock ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+            {product.inStock ? 'In Stock' : 'Out of Stock'}
+          </span>
+        </div>
+        
+        <button
+          onClick={handleAddToCart}
+          disabled={!product.inStock || isAdding}
+          className={`w-full py-2 px-4 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 ${
+            product.inStock && !isAdding
+              ? 'bg-teal-500 hover:bg-teal-600 text-white transform hover:scale-105'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
+        >
+          {isAdding ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              <span>Adding...</span>
+            </>
+          ) : (
+            <>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6h11" />
+              </svg>
+              <span>Add To Cart</span>
+            </>
+          )}
         </button>
       </div>
     </div>

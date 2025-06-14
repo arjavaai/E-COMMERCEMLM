@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { CartProvider } from './contexts/CartContext';
+import { ProductProvider } from './contexts/ProductContext';
+import { OrderProvider } from './contexts/OrderContext';
 
 // Components Import
 import { 
@@ -11,7 +15,13 @@ import {
   PopularProducts, 
   BusinessTools, 
   MobileAppSection, 
-  Footer 
+  Footer,
+  AuthModal,
+  CartSidebar,
+  UserDashboard,
+  AdminDashboard,
+  Checkout,
+  ProductDetail
 } from './components';
 
 const Home = () => {
@@ -32,11 +42,25 @@ const Home = () => {
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <ProductProvider>
+          <CartProvider>
+            <OrderProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/dashboard" element={<UserDashboard />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                </Routes>
+                <AuthModal />
+                <CartSidebar />
+              </BrowserRouter>
+            </OrderProvider>
+          </CartProvider>
+        </ProductProvider>
+      </AuthProvider>
     </div>
   );
 }

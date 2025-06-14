@@ -15,7 +15,9 @@ import {
   PopularProducts, 
   BusinessTools, 
   MobileAppSection, 
-  Footer
+  Footer,
+  AuthModal,
+  CartSidebar
 } from './components';
 
 const Home = () => {
@@ -44,6 +46,8 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                 </Routes>
+                <AuthModal />
+                <CartSidebar />
               </BrowserRouter>
             </OrderProvider>
           </CartProvider>

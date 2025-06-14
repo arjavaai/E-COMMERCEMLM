@@ -599,6 +599,31 @@ export const PopularProducts = () => {
 
 // Business Tools Section
 export const BusinessTools = () => {
+  const { getProductsByCategory, loading } = useProducts();
+  const businessTools = getProductsByCategory('Business Tools');
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Business Tools</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white rounded-xl p-6 animate-pulse">
+                <div className="aspect-square bg-gray-300 rounded-lg mb-4"></div>
+                <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                <div className="h-3 bg-gray-300 rounded mb-2"></div>
+                <div className="h-8 bg-gray-300 rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -607,7 +632,7 @@ export const BusinessTools = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          {businessToolsData.map((product) => (
+          {businessTools.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
